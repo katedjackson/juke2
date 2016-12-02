@@ -9,7 +9,9 @@ import Album from '../components/Album.js';
 import Sidebar from '../components/Sidebar';
 import Player from '../components/Player';
 
-import { convertAlbum, convertAlbums, skip } from '../utils';
+import Promise from 'bluebird';
+
+import { convertArtist, convertAlbum, convertAlbums, skip } from '../utils';
 
 export default class AppContainer extends Component {
 
@@ -108,11 +110,20 @@ export default class AppContainer extends Component {
   }
 
   selectArtist(artistId) {
-    axios.get(`/api/artists/${artistId}`)
-      .then(res => res.data)
-      .then(artist => this.setState({
-        selectedArtist: convertArtist(artist)
-      }));
+    const ProsifiedArtist = axios.get(`/api/artists/${artistId}`)
+        .then(res => res.data);
+    const ProsifiedSongs = axios.get(`/api/artists/${artistId}/songs`)
+          .then(res => res.data)
+    const ProsifiedAlbums = axios.get(`/api/artists/${artistId}/albums`)
+          .then(res => res.data)
+    Promise.all([ProsifiedArtist,ProsifiedSongs,ProsifiedAlbums])
+      .spread((artist, songs, albums)=> {
+        artist.songs = songs,
+        artist.albums = albums,
+        this.setState({
+          selectedArtist: convertArtist(artist)
+        })
+      });
   }
 
   render () {

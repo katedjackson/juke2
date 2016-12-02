@@ -12,9 +12,6 @@ export default class Artist extends Component {
     }
 
     render() {
-
-      console.log(this.props);
-
       const artist = this.props.artist;
       const albums = this.props.artist.albums;
       const currentSong = this.props.currentSong;
