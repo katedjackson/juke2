@@ -4,10 +4,9 @@ import axios from 'axios';
 import initialState from '../initialState';
 import AUDIO from '../audio';
 
-import Albums from '../components/Albums.js';
-import Album from '../components/Album.js';
 import Sidebar from '../components/Sidebar';
 import Player from '../components/Player';
+
 
 import Promise from 'bluebird';
 

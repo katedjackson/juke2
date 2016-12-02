@@ -9,6 +9,8 @@ export default class Album extends Component {
     const toggle = this.props.toggleOne;
 
     return (
+      <div>
+      <h3> SONGS </h3>
       <table className='table'>
         <thead>
           <tr>
@@ -37,6 +39,7 @@ export default class Album extends Component {
           }
         </tbody>
       </table>
+      </div>
     );
   }
 }

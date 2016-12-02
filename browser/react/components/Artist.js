@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import Songs from '../components/Songs';
+import Albums from '../components/Albums';
 
 export default class Artist extends Component {
 
@@ -13,38 +14,23 @@ export default class Artist extends Component {
 
     render() {
       const artist = this.props.artist;
-      const albums = this.props.artist.albums;
-      const currentSong = this.props.currentSong;
-      const isPlaying = this.props.isPlaying;
-      const toggleOne = this.props.toggleOne;
+      const children = this.props.children;
+      const propsToPassToChildren = {
+        albums: this.props.artist.albums,
+        songs: this.props.artist.songs,
+        currentSong: this.props.currentSong,
+        isPlaying: this.props.isPlaying,
+        toggle: this.props.toggleOne
+      }
 
       return (
         <div>
           <h3>{artist.name}</h3>
-          <div className="album">
-            <div className="row">
-              {
-                albums.map(album => (
-                  <div className="col-xs-4" key={ album.id }>
-                    <Link to={`/albums/${album.id}`} className="thumbnail">
-                      <img src={ album.imageUrl } />
-                      <div className="caption">
-                        <h5>
-                          <span>{ album.name }</span>
-                        </h5>
-                        <small>{ album.songs.length } songs</small>
-                      </div>
-                      </Link>
-                  </div>
-                ))
-              }
-              </div>
-            <Songs
-              songs={artist.songs}
-              currentSong={currentSong}
-              isPlaying={isPlaying}
-              toggleOne={toggleOne} />
-          </div>
+          <ul className="nav nav-tabs">
+              <li><Link to={`/artists/${artist.id}/albums`}>ALBUMS</Link></li>
+              <li><Link to={`/artists/${artist.id}/songs`}>SONGS</Link></li>
+            </ul>
+            { children && React.cloneElement(children, propsToPassToChildren) }
         </div>
       );
   }
