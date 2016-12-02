@@ -23,12 +23,17 @@ export default class AppContainer extends Component {
     this.prev = this.prev.bind(this);
     this.selectAlbum = this.selectAlbum.bind(this);
     this.deselectAlbum = this.deselectAlbum.bind(this);
+    this.selectArtist = this.selectArtist.bind(this);
   }
 
   componentDidMount () {
     axios.get('/api/albums/')
       .then(res => res.data)
       .then(album => this.onLoad(convertAlbums(album)));
+
+     axios.get('/api/artists/')
+      .then(res => res.data)
+      .then(artists => this.setState({artists: artists}));
 
     AUDIO.addEventListener('ended', () =>
       this.next());
@@ -102,11 +107,19 @@ export default class AppContainer extends Component {
     this.setState({ selectedAlbum: {}});
   }
 
+  selectArtist(artistId) {
+    axios.get(`/api/artists/${artistId}`)
+      .then(res => res.data)
+      .then(artist => this.setState({
+        selectedArtist: convertArtist(artist)
+      }));
+  }
+
   render () {
     return (
       <div id="main" className="container-fluid">
         <div className="col-xs-2">
-          <Sidebar deselectAlbum={this.deselectAlbum} />
+          <Sidebar />
         </div>
         <div className="col-xs-10">
         {
@@ -121,7 +134,14 @@ export default class AppContainer extends Component {
 
               // Albums (plural) component's props
               albums: this.state.albums,
-              selectAlbum: this.selectAlbum // note that this.selectAlbum is a method, and this.state.selectedAlbum is the chosen album
+              selectAlbum: this.selectAlbum,
+
+              //Artist (singular)
+              artist: this.state.selectedArtist,
+
+              // Artists (plural)
+              artists: this.state.artists,
+              selectArtist: this.selectArtist
             })
             : null
         }

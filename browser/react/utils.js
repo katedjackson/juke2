@@ -20,3 +20,9 @@ export const skip = (interval, { currentSongList, currentSong }) => {
   const next = currentSongList[idx];
   return [next, currentSongList];
 };
+
+export const convertArtist = (artist) => {
+  // artist.albums = convertAlbums(artist.albums);
+  artist.songs = artist.songs.map(convertSong);
+  return artist;
+};
